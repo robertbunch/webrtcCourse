@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title></title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel='stylesheet' type='text/css' media='screen' href='styles.css'>
+</head>
+<body>
+    <div class="container row">
+        <div class="buttons col-4">
+            <button id="share" class="btn btn-primary d-block mb-1">Share my mic and camera</button>
+            <button id="show-video" class="btn btn-secondary d-block mb-1">Show My Video</button>
+            <button id="stop-video" class="btn btn-secondary d-block mb-1">Stop My Video</button>
+            <div class="mb-1">
+                <button id="change-size" class="btn btn-secondary mb-1">Change screen size</button>
+                <input type="text" id="vid-width" value="1280"/>
+                <input type="text" id="vid-height" value="720"/>
+            </div>
+            <button id="start-record" class="btn btn-secondary mb-1">Start recording</button>
+            <button id="stop-record" class="btn btn-secondary mb-1">Stop Recording</button>
+            <button id="play-record" class="btn btn-secondary mb-1">Play Recording</button>
+            <button id="share-screen" class="btn btn-secondary mb-1">Share Screen</button>
+            <button id="make-offer" class="btn btn-secondary d-block mb-1">Make An Offer</button>
+            <button id="accept-offer" class="btn btn-secondary d-block mb-1">Accept Offer/Make Answer</button>
+            <button id="show-video" class="btn btn-secondary d-block mb-1">Show Other video</button>
+        </div>
+        <div class="videos col-8">
+            <div>
+                <h3>My feed</h3>
+                <video id="my-video" class="video" autoplay playsinline></video>
+            </div>
+            <div>
+                <h3>Their feed</h3>
+                <video id="other-video" class="video" autoplay playsinline></video>
+            </div>
+        </div>
+    </div>
+    <script src='scripts.js'></script>
+</body>
+</html>

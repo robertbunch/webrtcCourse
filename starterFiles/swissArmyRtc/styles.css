@@ -1,0 +1,17 @@
+
+.container{
+    margin: 20px auto;
+}
+  
+.video{
+    background-color:#333;
+    padding:20px;
+    border-radius:10px;
+    color:#fff;
+    font-size:40px;
+    height: 40vh;
+}
+
+#vid-width,#vid-height{
+    width: 50px;
+}
