@@ -21,7 +21,7 @@ SIGNALING (someone to help the browser find/talk to each)
 CLIENT1 and Signaling server wait.
     - wait for an answerer/CLIENT2/reciever
 10. CLIENT2 loads up the webpage with io.connect()
-    - a new client is connected to signaling server
+    - a new client is connected to signaling/socket.io server
 11. socket.io emit out the RTCSessionDesc to the new client
     - an offer to be sent!
 12. CLIENT2 runs getUserMedia()
