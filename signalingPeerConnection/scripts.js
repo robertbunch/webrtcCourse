@@ -1,4 +1,12 @@
-const socket = io.connect('https://localhost:8181/')
+const userName = "Rob-"+Math.floor(Math.random() * 100000)
+const password = "x";
+document.querySelector('#user-name').innerHTML = userName;
+
+const socket = io.connect('https://localhost:8181/',{
+    auth: {
+        userName,password
+    }
+})
 
 const localVideoEl = document.querySelector('#local-video');
 const remoteVideoEl = document.querySelector('#remote-video');
@@ -36,6 +44,7 @@ const call = async e=>{
         const offer = await peerConnection.createOffer();
         console.log(offer);
         peerConnection.setLocalDescription(offer);
+        socket.emit('newOffer',offer); //send offer to signalingServer
     }catch(err){
         console.log(err)
     }

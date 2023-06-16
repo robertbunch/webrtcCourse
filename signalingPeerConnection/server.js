@@ -18,10 +18,48 @@ const cert = fs.readFileSync('cert.crt');
 const expressServer = https.createServer({key, cert}, app);
 //create our socket.io server... it will listen to our express port
 const io = socketio(expressServer);
-
 expressServer.listen(8181);
+
+//offers will contain {}
+const offers = [
+    // offererUserName
+    // offer
+    // offerIceCandidates
+    // answererUserName
+    // answer
+    // answererIceCandidates
+];
+const connectedSockets = [
+    //username, socketId
+]
+
 io.on('connection',(socket)=>{
-    console.log("Someone has connected");
+    // console.log("Someone has connected");
+    const userName = socket.handshake.auth.userName;
+    const password = socket.handshake.auth.password;
+
+    if(password !== "x"){
+        socket.disconnect(true);
+        return;
+    }
+    connectedSockets.push({
+        socketId: socket.id,
+        userName
+    })
+
+    socket.on('newOffer',newOffer=>{
+        offers.push({
+            offererUserName: userName,
+            offer: newOffer,
+            offerIceCandidates: [],
+            answererUserName: null,
+            answer: null,
+            answererIceCandidates: []
+        })
+        //send out to all connected sockets EXCEPT the caller
+        socket.broadcast.emit('newOfferAwaiting',offers.slice(-1))
+    })
+
 })
 
 
