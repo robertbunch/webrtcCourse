@@ -35,6 +35,7 @@ const call = async e=>{
         console.log("Creating offer...")
         const offer = await peerConnection.createOffer();
         console.log(offer);
+        peerConnection.setLocalDescription(offer);
     }catch(err){
         console.log(err)
     }
