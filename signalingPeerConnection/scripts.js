@@ -47,6 +47,11 @@ const createPeerConnection = ()=>{
         //we can pass a config object, and that config object can contain stun servers
         //which will fetch us ICE candidates
         peerConnection = await new RTCPeerConnection(peerConfiguration)
+
+        localStream.getTracks().forEach(track=>{
+            peerConnection.addTrack(track,localStream);
+        })
+
         peerConnection.addEventListener('icecandidate',e=>{
             console.log('........Ice candidate found!......')
             console.log(e)
