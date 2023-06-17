@@ -53,6 +53,10 @@ const call = async e=>{
 
 }
 
+const answerOffer = (offerObj)=>{
+    console.log(offerObj)
+}
+
 const createPeerConnection = ()=>{
     return new Promise(async(resolve, reject)=>{
         //RTCPeerConnection is the thing that creates the connection
