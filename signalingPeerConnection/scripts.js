@@ -29,12 +29,7 @@ let peerConfiguration = {
 
 //when a client initiates a call
 const call = async e=>{
-    const stream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        // audio: true,
-    });
-    localVideoEl.srcObject = stream;
-    localStream = stream;
+    await fetchUserMedia();
 
     //peerConnection is all set with our STUN servers sent over
     await createPeerConnection();
@@ -53,11 +48,33 @@ const call = async e=>{
 
 }
 
-const answerOffer = (offerObj)=>{
+const answerOffer = async(offerObj)=>{
+    await fetchUserMedia()
+    await createPeerConnection(offerObj);
+    const answer = await peerConnection.createAnswer({}); //just to make the docs happy
+    peerConnection.setLocalDescription(answer); //this is CLIENT2, and CLIENT2 uses the answer as the localDesc
     console.log(offerObj)
+    console.log(answer)
 }
 
-const createPeerConnection = ()=>{
+const fetchUserMedia = ()=>{
+    return new Promise(async(resolve, reject)=>{
+        try{
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: true,
+                // audio: true,
+            });
+            localVideoEl.srcObject = stream;
+            localStream = stream;    
+            resolve();    
+        }catch(err){
+            console.log(err);
+            reject()
+        }
+    })
+}
+
+const createPeerConnection = (offerObj)=>{
     return new Promise(async(resolve, reject)=>{
         //RTCPeerConnection is the thing that creates the connection
         //we can pass a config object, and that config object can contain stun servers
@@ -79,6 +96,11 @@ const createPeerConnection = ()=>{
                 })    
             }
         })
+        if(offerObj){
+            //this won't be set when called from call();
+            //will be set when we call from answerOffer()
+            peerConnection.setRemoteDescription(offerObj.offer)
+        }
         resolve();
     })
 }
