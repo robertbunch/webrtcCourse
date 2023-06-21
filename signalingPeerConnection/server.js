@@ -76,6 +76,7 @@ io.on('connection',(socket)=>{
             return;
         }
         //we found the matching socket, so we can emit to it!
+        const socketIdToAnswer = socketToAnswer.socketId;
     })
 
     socket.on('sendIceCandidateToSignalingServer',iceCandidateObj=>{
