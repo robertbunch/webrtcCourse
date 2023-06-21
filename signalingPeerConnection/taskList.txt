@@ -39,7 +39,7 @@ Signaling server has been waiting...
     - and is done. 
     - waiting on ICE candidates
     - waiting on tracks
-21. signaling server sends CLIENT1 answer (RTCSessionDesc - sdp/type)
+21. signaling server listens for answer, emits CLIENT1 answer (RTCSessionDesc - sdp/type)
 22. CLIENT1 takes the answer and hands it to pc.setRemoteDesc
 ~23. CLIENT1 waits for ICE candidates and tracks
 

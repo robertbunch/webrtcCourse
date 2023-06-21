@@ -67,6 +67,17 @@ io.on('connection',(socket)=>{
         socket.broadcast.emit('newOfferAwaiting',offers.slice(-1))
     })
 
+    socket.on('newAnswer',offerObj=>{
+        console.log(offerObj);
+        //emit this answer (offerObj) back to CLIENT1
+        //in order to do that, we need CLIENT1's socketid
+        const socketToAnswer = connectedSockets.find(s=>s.userName === offerObj.offererUserName)
+        if(!socketToAnswer){
+            return;
+        }
+        //we found the matching socket, so we can emit to it!
+    })
+
     socket.on('sendIceCandidateToSignalingServer',iceCandidateObj=>{
         const { didIOffer, iceUserName, iceCandidate } = iceCandidateObj;
         // console.log(iceCandidate);

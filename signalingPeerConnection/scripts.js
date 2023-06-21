@@ -56,6 +56,10 @@ const answerOffer = async(offerObj)=>{
     console.log(offerObj)
     console.log(answer)
     // console.log(peerConnection.signalingState) //should be have-local-pranswer because CLIENT2 has set its local desc to it's answer (but it won't be)
+    //add the answer to the offerObj so the server knows which offer this is related to
+    offerObj.answer = answer 
+    //emit the answer to the signaling server, so it can emit to CLIENT1
+    socket.emit('newAnswer',offerObj)
 }
 
 const fetchUserMedia = ()=>{
