@@ -52,9 +52,10 @@ const answerOffer = async(offerObj)=>{
     await fetchUserMedia()
     await createPeerConnection(offerObj);
     const answer = await peerConnection.createAnswer({}); //just to make the docs happy
-    peerConnection.setLocalDescription(answer); //this is CLIENT2, and CLIENT2 uses the answer as the localDesc
+    await peerConnection.setLocalDescription(answer); //this is CLIENT2, and CLIENT2 uses the answer as the localDesc
     console.log(offerObj)
     console.log(answer)
+    // console.log(peerConnection.signalingState) //should be have-local-pranswer because CLIENT2 has set its local desc to it's answer (but it won't be)
 }
 
 const fetchUserMedia = ()=>{
@@ -85,6 +86,11 @@ const createPeerConnection = (offerObj)=>{
             peerConnection.addTrack(track,localStream);
         })
 
+        peerConnection.addEventListener("signalingstatechange", (event) => {
+            console.log(event);
+            console.log(peerConnection.signalingState)
+        });
+
         peerConnection.addEventListener('icecandidate',e=>{
             console.log('........Ice candidate found!......')
             console.log(e)
@@ -99,7 +105,9 @@ const createPeerConnection = (offerObj)=>{
         if(offerObj){
             //this won't be set when called from call();
             //will be set when we call from answerOffer()
-            peerConnection.setRemoteDescription(offerObj.offer)
+            // console.log(peerConnection.signalingState) //should be stable because no setDesc has been run yet
+            await peerConnection.setRemoteDescription(offerObj.offer)
+            // console.log(peerConnection.signalingState) //should be have-remote-offer, because client2 has setRemoteDesc on the offer
         }
         resolve();
     })
