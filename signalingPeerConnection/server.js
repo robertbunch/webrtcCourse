@@ -30,7 +30,7 @@ const offers = [
     // answererIceCandidates
 ];
 const connectedSockets = [
-    username, socketId
+    // username, socketId
 ]
 
 io.on('connection',(socket)=>{
@@ -98,6 +98,7 @@ io.on('connection',(socket)=>{
             const offerInOffers = offers.find(o=>o.offererUserName === iceUserName);
             if(offerInOffers){
                 offerInOffers.offerIceCandidates.push(iceCandidate)
+                //1. the answerer does not exist yet and will get these on connection
                 //come back to this...
                 //if the answerer is already here, emit the iceCandidates to that user
             }
