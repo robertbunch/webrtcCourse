@@ -73,10 +73,22 @@ io.on('connection',(socket)=>{
         //in order to do that, we need CLIENT1's socketid
         const socketToAnswer = connectedSockets.find(s=>s.userName === offerObj.offererUserName)
         if(!socketToAnswer){
+            console.log("No matching socket")
             return;
         }
         //we found the matching socket, so we can emit to it!
         const socketIdToAnswer = socketToAnswer.socketId;
+        //we find the offer to update so we can emit it
+        const offerToUpdate = offers.find(o=>o.offererUserName === offerObj.offererUserName)
+        if(!offerToUpdate){
+            console.log("No OfferToUpdate")
+            return;
+        }
+        offerToUpdate.answer = offerObj.answer
+        offerToUpdate.answererUserName = userName
+        //socket has a .to() which allows emiting to a "room"
+        //every socket has it's own room
+        socket.to(socketIdToAnswer).emit('answerResponse',offerToUpdate)
     })
 
     socket.on('sendIceCandidateToSignalingServer',iceCandidateObj=>{
