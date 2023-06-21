@@ -30,7 +30,7 @@ const offers = [
     // answererIceCandidates
 ];
 const connectedSockets = [
-    //username, socketId
+    username, socketId
 ]
 
 io.on('connection',(socket)=>{
