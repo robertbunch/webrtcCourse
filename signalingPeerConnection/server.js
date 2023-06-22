@@ -95,13 +95,16 @@ io.on('connection',(socket)=>{
         const { didIOffer, iceUserName, iceCandidate } = iceCandidateObj;
         // console.log(iceCandidate);
         if(didIOffer){
+            //this ice candidate came from the offerer
             const offerInOffers = offers.find(o=>o.offererUserName === iceUserName);
             if(offerInOffers){
                 offerInOffers.offerIceCandidates.push(iceCandidate)
                 //1. the answerer does not exist yet and will get these on connection
                 //come back to this...
-                //if the answerer is already here, emit the iceCandidates to that user
+                //2.if the answerer is already here, emit the iceCandidates to that user
             }
+        }else{
+            //this ice candidate came from the answerer
         }
         // console.log(offers)
     })
