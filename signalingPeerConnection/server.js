@@ -67,7 +67,7 @@ io.on('connection',(socket)=>{
         socket.broadcast.emit('newOfferAwaiting',offers.slice(-1))
     })
 
-    socket.on('newAnswer',offerObj=>{
+    socket.on('newAnswer',(offerObj,ackFunction)=>{
         console.log(offerObj);
         //emit this answer (offerObj) back to CLIENT1
         //in order to do that, we need CLIENT1's socketid
@@ -84,6 +84,8 @@ io.on('connection',(socket)=>{
             console.log("No OfferToUpdate")
             return;
         }
+        //send back to the answerer all the iceCandidates we have already collected
+        ackFunction(offerToUpdate.offerIceCandidates);
         offerToUpdate.answer = offerObj.answer
         offerToUpdate.answererUserName = userName
         //socket has a .to() which allows emiting to a "room"
@@ -95,11 +97,20 @@ io.on('connection',(socket)=>{
         const { didIOffer, iceUserName, iceCandidate } = iceCandidateObj;
         // console.log(iceCandidate);
         if(didIOffer){
+            //this ice is coming from the offerer. Send to the answerer
             const offerInOffers = offers.find(o=>o.offererUserName === iceUserName);
             if(offerInOffers){
                 offerInOffers.offerIceCandidates.push(iceCandidate)
-                //come back to this...
+                // 1. When the answerer answers, all existing ice candidates are sent
+                // 2. Any candidates that come in after the offer has been answered, will be passed through
+                if(offerInOffers.answererUserName){
+                    //pass it through to the other socket
+                }
             }
+        }else{
+            //this ice is coming from the answerer. Send to the offerer
+            //pass it through to the other socket
+
         }
         // console.log(offers)
     })
