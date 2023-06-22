@@ -99,7 +99,6 @@ io.on('connection',(socket)=>{
             if(offerInOffers){
                 offerInOffers.offerIceCandidates.push(iceCandidate)
                 //come back to this...
-                //if the answerer is already here, emit the iceCandidates to that user
             }
         }
         // console.log(offers)
