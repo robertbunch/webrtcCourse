@@ -54,7 +54,12 @@ const answerOffer = async(offerObj)=>{
     const answer = await peerConnection.createAnswer({}); //just to make the docs happy
     await peerConnection.setLocalDescription(answer); //this is CLIENT2, and CLIENT2 uses the answer as the localDesc
     console.log(offerObj)
-    console.log(answer)
+    //check for ice candidates from the offerer. If they exist...
+    offerObj.offerIceCandidates.forEach(i=>{
+        peerConnection.addIceCandidate(i);
+        console.log("=========Added and ice candiate========")
+    })
+    // console.log(answer)
     // console.log(peerConnection.signalingState) //should be have-local-pranswer because CLIENT2 has set its local desc to it's answer (but it won't be)
     //add the answer to the offerObj so the server knows which offer this is related to
     offerObj.answer = answer 
