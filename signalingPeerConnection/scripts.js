@@ -126,14 +126,11 @@ const createPeerConnection = (offerObj)=>{
         })
         
         peerConnection.addEventListener('track',e=>{
-            // console.log("Got a track from the other peer!! How excting")
-            // console.log(e)
-            //the event is an RTCTrackEvent and it has a streams property
-            //the streams property is an array with a MediaStream in each index
-            //usually, this will only be 1 stream/index
+            console.log("Got a track from the other peer!! How excting")
+            console.log(e)
             e.streams[0].getTracks().forEach(track=>{
-                remoteStream.addTrack(track,remoteStream)
-                console.log("Added a new track to remote (fingers crossed)")
+                remoteStream.addTrack(track,remoteStream);
+                console.log("Here's an exciting moment... fingers cross")
             })
         })
 
