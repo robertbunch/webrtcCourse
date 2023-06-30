@@ -22,8 +22,11 @@ app.get('/user-link',(req, res)=>{
     // res.json("This is a test route")
 })  
 
-app.get('/validate-link',(req, res)=>{
-    const token = req.query.token;
+app.post('/validate-link',(req, res)=>{
+    //get the token from the body of the post request (  thanks express.json() )
+    const token = req.body.token;
+    //decode the jwt with our secret
     const decodedData = jwt.verify(token,linkSecret);
+    //send the decoded data (our object) back to the front end
     res.json(decodedData)
 })

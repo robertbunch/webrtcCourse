@@ -3,9 +3,13 @@
 const fs = require('fs'); //the file system
 const https = require('https');
 const express = require('express');
+const cors = require('cors');
+
 const socketio = require('socket.io');
 const app = express();
+app.use(cors()) //this will open our Express API to ANY domain
 app.use(express.static(__dirname+'/public'));
+app.use(express.json()); //this will allow us to parse json in the body with the body parser
 
 const key = fs.readFileSync('./certs/cert.key');
 const cert = fs.readFileSync('./certs/cert.crt');
