@@ -5,12 +5,34 @@ import './VideoComponents.css';
 import CallInfo from "./CallInfo";
 import ChatWindow from "./ChatWindow";
 import ActionButtons from "./ActionButtons";
+import addStream from '../redux-elements/actions/addStream';
+import { useDispatch } from "react-redux";
 
 const MainVideoPage = ()=>{
 
     //get query string finder hook 
     const [ searchParams, setSearchParams ] = useSearchParams();
     const [ apptInfo, setApptInfo ] = useState({})
+    const dispatch = useDispatch();
+    
+    useEffect(()=>{
+        //fetch the user media
+        const fetchMedia = async()=>{
+            const constraints = {
+                video: true, //must have one constraint, just dont show it yet
+                audio: false,
+            }
+            try{
+                const stream = await navigator.mediaDevices.getUserMedia(constraints);
+                //dispatch will send this function to the redux dispatcher so all reducers are notified
+                //we send 2 args, the who, and the stream
+                dispatch(addStream('localStream',stream));
+            }catch(err){
+                console.log(err);
+            }
+        }
+        fetchMedia()
+    },[])
 
     useEffect(()=>{
         //grab the token var out of the query string
