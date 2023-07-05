@@ -10,6 +10,15 @@
   transform: scaleX(-1); 
 }
 
+#own-feed{
+  position: absolute;
+   border: white 1px solid;
+   right: 50px;
+   top: 50px;
+   border-radius: 10px;
+   width: 320px;
+}
+
 #menu-buttons{
   height: 80px;
   width: 100%;
