@@ -1,0 +1,105 @@
+.container-fluid{
+  margin: 0;
+  padding: 0;
+}
+
+#large-feed{
+  background-color: black;
+  height: 100vh;
+  width: 100vw;
+  transform: scaleX(-1); 
+}
+
+#menu-buttons{
+  height: 80px;
+  width: 100%;
+  background-color: #333;
+  position: absolute;
+  bottom: -6px;
+  left: 11px;
+}
+
+#menu-buttons .fa{
+  font-size: 24px;
+}
+
+.hidden{
+  display: none;
+}
+
+.button{
+  width: 100px;
+  height: 80px;
+  position: relative;
+}
+
+.button:hover{
+  position: relative;
+  background-color: #aaa;
+  cursor: pointer;
+}
+
+.button i{
+  font-size:32px; 
+  color:#ccc;
+  position: absolute;
+  left: 35px;
+  top: 20px;
+}
+
+.button .fa.fa-comment{
+  left: 40px;
+}
+
+.hang-up{
+  position: relative;
+  right: 10px;
+  top: 20px;
+}
+
+.btn-text{
+  position: absolute;
+  bottom: 10px;
+  color: white;    
+  text-align: center;
+  width: 100%;
+}
+
+
+.chat-window{
+position: absolute;
+right: -25%;
+height: 100px;
+transition: all 1s;
+z-index: 1000;
+width: 25%;
+top: 0;
+height: 100vh;
+}
+
+.chat-window.show{
+border: 1px solid black;
+background-color: white;
+right:0px;
+}
+
+.video-chat-wrapper{
+position: relative;
+overflow: hidden;
+}
+
+.call-info{
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+border: 1px solid #cacaca;
+background-color: #222;
+padding: 10px;
+}
+
+.call-info h1{
+color: white;
+}
+
+
