@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 // import { useDispatch, useSelector } from 'react-redux';
-import HangupButton from './HangUpButtons'
+import HangupButton from './HangupButton'
 import socket from '../utilities/socketConnection'
 import { useSelector } from 'react-redux';
 
