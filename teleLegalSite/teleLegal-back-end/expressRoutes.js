@@ -12,7 +12,7 @@ app.get('/user-link',(req, res)=>{
     //data for the end-user's appt
     const apptData = {
         professionalsFullName: "Robert Bunch, J.D.",
-        apptDate: Date.now()
+        apptDate: Date.now() + 500000
     }
 
     //we need to encode this data in a token
