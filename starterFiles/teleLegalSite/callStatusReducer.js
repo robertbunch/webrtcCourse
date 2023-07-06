@@ -14,7 +14,7 @@ export default (state = initState, action)=>{
         copyState[action.payload.prop] = action.payload.value
         return copyState
     }else if((action.type === "LOGOUT_ACTION") || (action.type === "NEW_VERSION")){
-        return "idle"
+        return initState
     }else{
         return state
     }
