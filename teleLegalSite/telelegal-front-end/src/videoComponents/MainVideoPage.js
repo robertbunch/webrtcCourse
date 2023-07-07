@@ -32,9 +32,9 @@ const MainVideoPage = ()=>{
                 //we don't know "who" we are talking to... yet.
                 dispatch(addStream('remote1',remoteStream, peerConnection));
                 //we have a peerconnection... let's make an offer!
-                const offer = await peerConnection.createOffer();
-                peerConnection.setLocalDescription(offer);
-                //socket.emit the offer!
+                //EXCEPT, it's not time yet. 
+                    //SDP = information about the feed, and we have NO tracks
+                //socket.emit...
             }catch(err){
                 console.log(err);
             }
