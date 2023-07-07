@@ -7,6 +7,7 @@ import ChatWindow from "./ChatWindow";
 import ActionButtons from "./ActionButtons";
 import addStream from '../redux-elements/actions/addStream';
 import { useDispatch } from "react-redux";
+import createPeerConnection from "../utilities/createPeerConnection";
 
 const MainVideoPage = ()=>{
 
@@ -27,6 +28,13 @@ const MainVideoPage = ()=>{
                 //dispatch will send this function to the redux dispatcher so all reducers are notified
                 //we send 2 args, the who, and the stream
                 dispatch(addStream('localStream',stream));
+                const { peerConnection, remoteStream } = await createPeerConnection();
+                //we don't know "who" we are talking to... yet.
+                dispatch(addStream('remote1',remoteStream, peerConnection));
+                //we have a peerconnection... let's make an offer!
+                const offer = await peerConnection.createOffer();
+                peerConnection.setLocalDescription(offer);
+                //socket.emit the offer!
             }catch(err){
                 console.log(err);
             }

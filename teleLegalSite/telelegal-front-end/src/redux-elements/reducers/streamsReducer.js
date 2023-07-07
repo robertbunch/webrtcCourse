@@ -1,7 +1,8 @@
 //this holds all streams as objects
 //{
     // who
-    // stream
+    // stream = thing with tracks that plays in <video />
+    // peerConnection = actual webRTC connection
 // }
 
 //local, remote1, remote2+
