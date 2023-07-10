@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 // import { useDispatch, useSelector } from 'react-redux';
 import HangupButton from './HangupButton'
-import socket from '../utilities/socketConnection'
+import socket from '../webRTCutilities/socketConnection'
 import { useSelector } from 'react-redux';
 
 const ActionButtons = ({openCloseChat,smallFeedlEl})=>{

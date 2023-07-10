@@ -8,7 +8,7 @@ const CallInfo = ({apptInfo})=>{
     useEffect(() => {
         const timeInterval = setInterval(()=>{
             setMomentText(moment(apptInfo.apptDate).fromNow())
-            console.log("Updating time")
+            // console.log("Updating time")
         },5000)
         //clean up function
         return () => {

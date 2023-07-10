@@ -7,7 +7,7 @@
 
 //local, remote1, remote2+
 
-export default (state, action)=>{
+export default (state = {}, action)=>{
     if(action.type === "ADD_STREAM"){
         const copyState = {...state};
         copyState[action.payload.who] = action.payload
