@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "react-router-dom"
 import axios from 'axios';
 import './VideoComponents.css';
@@ -9,14 +9,17 @@ import addStream from '../redux-elements/actions/addStream';
 import { useDispatch } from "react-redux";
 import createPeerConnection from "../webRTCutilities/createPeerConnection";
 import socket from '../webRTCutilities/socketConnection';
+import updateCallStatus from "../redux-elements/actions/updateCallStatus";
 
 const MainVideoPage = ()=>{
 
+    const dispatch = useDispatch();
     //get query string finder hook 
     const [ searchParams, setSearchParams ] = useSearchParams();
     const [ apptInfo, setApptInfo ] = useState({})
-    const dispatch = useDispatch();
-    
+    const smallFeedEl = useRef(null); //this is a React ref to a dom element, so we can interact with it the React way
+    const largeFeedEl = useRef(null);
+
     useEffect(()=>{
         //fetch the user media
         const fetchMedia = async()=>{
@@ -26,6 +29,7 @@ const MainVideoPage = ()=>{
             }
             try{
                 const stream = await navigator.mediaDevices.getUserMedia(constraints);
+                dispatch(updateCallStatus('haveMedia',true)); //update our callStatus reducer to know that we have the media
                 //dispatch will send this function to the redux dispatcher so all reducers are notified
                 //we send 2 args, the who, and the stream
                 dispatch(addStream('localStream',stream));
@@ -59,12 +63,12 @@ const MainVideoPage = ()=>{
         <div className="main-video-page">
             <div className="video-chat-wrapper">
                 {/* Div to hold our remote video, our local video, and our chat window*/}
-                <video id="large-feed" autoPlay controls playsInline></video>
-                <video id="own-feed" autoPlay controls playsInline></video>
+                <video id="large-feed" ref={largeFeedEl} autoPlay controls playsInline></video>
+                <video id="own-feed" ref={smallFeedEl} autoPlay controls playsInline></video>
                 {apptInfo.professionalsFullName ? <CallInfo apptInfo={apptInfo} /> : <></>}
                 <ChatWindow />
             </div>
-            <ActionButtons />
+            <ActionButtons smallFeedEl={smallFeedEl} />
         </div>
     )
 }
