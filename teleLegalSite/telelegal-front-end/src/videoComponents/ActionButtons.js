@@ -4,7 +4,7 @@ import HangupButton from './HangupButton'
 import socket from '../utilities/socketConnection'
 import { useSelector } from 'react-redux';
 
-const ActionButtons = ({openCloseChat})=>{
+const ActionButtons = ({openCloseChat,smallFeedlEl})=>{
     const callStatus = useSelector(state=>state.callStatus);
     // const callStatus = useSelector(state=>state.callStatus);
     const menuButtons = useRef(null)
@@ -50,28 +50,41 @@ const ActionButtons = ({openCloseChat})=>{
         <div id="menu-buttons" ref={menuButtons} className="row">
             {/* <i className="fa fa-microphone" style="font-size:48px;color:red"></i> */}
             <div className="left col-2">
-                <div className="button mic d-inline-block">
-                    <i className="fa fa-microphone"></i>
-                    <div className="btn-text">{micText}</div>
+                <div className="button-wrapper d-inline-block">
+                    <i className="fa fa-caret-up choose-audio"></i>
+                    <div className="button mic">
+                        <i className="fa fa-microphone"></i>
+                        <div className="btn-text">{micText}</div>
+                    </div>
                 </div>
-                <div className="button camera d-inline-block">
-                    <i className="fa fa-video"></i>
-                    <div className="btn-text">{callStatus.video ? "Stop" : "Start"} Video</div>
+                <div className="button-wrapper video-button d-inline-block">
+                    <i className="fa fa-caret-up choose-video"></i>
+                    <div className="button camera">
+                        <i className="fa fa-video"></i>
+                        <div className="btn-text">{callStatus.video === "display" ? "Stop" : "Start"} Video</div>
+                    </div>
                 </div>
             </div>
 
             <div className="col-8 text-center">
-                <div className="button security d-inline-block">
-                    <i className="fa fa-users"></i>
-                    <div className="btn-text">Participants</div>
+                <div className="button-wrapper d-inline-block">
+                    <i className="fa fa-caret-up choose-video"></i>
+                    <div className="button participants">
+                        <i className="fa fa-users"></i>
+                        <div className="btn-text">Participants</div>
+                    </div>
                 </div>
-                <div className="button participants d-inline-block">
-                    <i className="fa fa-comment" onClick={openCloseChat}></i>
-                    <div className="btn-text" onClick={openCloseChat}>Chat</div>
+                <div className="button-no-caret d-inline-block">
+                    <div className="button participants">
+                        <i className="fa fa-comment" onClick={openCloseChat}></i>
+                        <div className="btn-text" onClick={openCloseChat}>Chat</div>
+                    </div>
                 </div>
-                <div className="button participants d-inline-block">
-                    <i className="fa fa-desktop"></i>
-                    <div className="btn-text">Share Screen</div>
+                <div className="button-no-caret participants d-inline-block">
+                    <div className="button participants">
+                        <i className="fa fa-desktop"></i>
+                        <div className="btn-text">Share Screen</div>
+                    </div>
                 </div>
             </div>  
 
