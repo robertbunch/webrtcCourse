@@ -1,7 +1,7 @@
 const initState = {
     current: "idle", //negotiating, progress, complete
-    video: false, //video is NOT on
-    audio: false, //audio is NOT on
+    video: "off", //video feed status: "off" "enabled" "disabled" "complete"
+    audio: "off", //audio is NOT on
     audioDevice: 'default', //enumerate devices, chosen audio device
     videoDevice: 'default',
     shareScreen: false, 
