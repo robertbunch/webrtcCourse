@@ -36,24 +36,48 @@
   display: none;
 }
 
-.button{
+.button-no-caret, .button-wrapper, .button{
   width: 100px;
   height: 80px;
   position: relative;
 }
 
-.button:hover{
+
+
+.button-no-caret:hover, .button:hover{
   position: relative;
-  background-color: #aaa;
+  background-color: #555;
   cursor: pointer;
 }
 
-.button i{
+.button-no-caret i, .button-wrapper i{
   font-size:32px; 
   color:#ccc;
   position: absolute;
   left: 35px;
   top: 20px;
+}
+
+.button-wrapper i.fa-caret-up{
+left: 75px;
+top: 0px;
+z-index: 100000;
+padding: 5px;
+}
+
+.button-wrapper i.fa-caret-up:hover{
+background-color: #555;
+cursor: pointer;
+}
+
+.caret-dropdown{
+position: absolute;
+left: 100px;
+}
+
+.caret-dropdown select{
+background-color: #333;
+color: white;
 }
 
 .button .fa.fa-comment{
@@ -110,5 +134,3 @@ padding: 10px;
 .call-info h1{
 color: white;
 }
-
-
