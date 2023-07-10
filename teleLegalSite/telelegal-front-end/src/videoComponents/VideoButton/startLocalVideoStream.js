@@ -1,2 +1,8 @@
 
-//this function handles starting the video feed on all peerConnections
+//this functions job is to update all peerConnections (addTracks) and update redux callStatus
+
+const startLocalVideoStream = ()=>{
+
+}
+
+export default startLocalVideoStream;
