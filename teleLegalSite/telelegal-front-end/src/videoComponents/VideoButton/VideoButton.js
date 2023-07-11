@@ -46,7 +46,7 @@ const VideoButton = ({smallFeedEl})=>{
             startLocalVideoStream(streams, dispatch);
         }
     },[pendingUpdate,callStatus.haveMedia])
-
+ 
     return(
         <div className="button-wrapper video-button d-inline-block">
             <i className="fa fa-caret-up choose-video"></i>
