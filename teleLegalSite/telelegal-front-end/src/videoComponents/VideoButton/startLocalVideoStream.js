@@ -10,7 +10,7 @@ const startLocalVideoStream = (streams, dispatch)=>{
             const curStream = streams[s];
             //addTracks to all peerConnecions
             localStream.stream.getVideoTracks().forEach(t=>{
-                curStream.peerConnection.addTrack(t,curStream.stream);
+                curStream.peerConnection.addTrack(t,streams.localStream.stream);
             })
             //update redux callStatus
             dispatch(updateCallStatus('video',"enabled"));

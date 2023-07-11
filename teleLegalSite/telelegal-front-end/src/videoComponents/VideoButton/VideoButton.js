@@ -17,7 +17,7 @@ const VideoButton = ({smallFeedEl})=>{
     const DropDown = ()=>{
         return(
             <div className="caret-dropdown" style={{top:"-25px"}}>
-                <select defaultValue={1} onChange={changeVideoDevice}>
+                <select defaultValue={callStatus.videoDevice} onChange={changeVideoDevice}>
                     {videoDeviceList.map(vd=><option key={vd.deviceId} value={vd.deviceId}>{vd.label}</option>)}
                 </select>
             </div>
@@ -47,13 +47,18 @@ const VideoButton = ({smallFeedEl})=>{
             video: {deviceId: {exact: deviceId}}
         }
         const stream = await navigator.mediaDevices.getUserMedia(newConstraints)
-        //3. update Redux with that videoDevice
+        //3. update Redux with that videoDevice, and that video is enabled
         dispatch(updateCallStatus('videoDevice',deviceId));
+        dispatch(updateCallStatus('video','enabled'))
         //4. update the smallFeedEl
         smallFeedEl.current.srcObject = stream;
         //5. we need to update the localStream in streams
         dispatch(addStream('localStream',stream))
         //6. add tracks
+        const tracks = stream.getVideoTracks();
+        //come back to this later
+        //if we stop the old tracks, and add the new tracks, that will mean
+        // ... renegotiation
     }
 
     const startStopVideo = ()=>{
