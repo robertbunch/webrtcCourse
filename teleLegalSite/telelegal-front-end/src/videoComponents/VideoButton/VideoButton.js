@@ -2,13 +2,42 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from 'react';
 import startLocalVideoStream from "./startLocalVideoStream";
 import updateCallStatus from "../../redux-elements/actions/updateCallStatus";
+import getDevices from "./getDevices";
 
 const VideoButton = ({smallFeedEl})=>{
 
+    const dispatch = useDispatch();
     const callStatus = useSelector(state=>state.callStatus)
     const streams = useSelector(state=>state.streams);
     const [ pendingUpdate, setPendingUpdate ] = useState(false);
-    const dispatch = useDispatch();
+    const [ caretOpen, setCaretOpen ] = useState(false);
+    const [ videoDeviceList, setVideoDeviceList ] = useState([])
+
+    const DropDown = ()=>{
+        return(
+            <div className="caret-dropdown" style={{top:"-25px"}}>
+                <select defaultValue={1} onChange={changeVideoDevice}>
+                    {videoDeviceList.map(vd=><option key={vd.deviceId} value={vd.deviceId}>{vd.label}</option>)}
+                </select>
+            </div>
+        )
+    }
+
+    useEffect(()=>{
+        const getDevicesAsync = async()=>{
+            if(caretOpen){
+                //then we need to check for video devices
+                const devices = await getDevices();
+                console.log(devices.videoDevices)
+                setVideoDeviceList(devices.videoDevices)
+            }
+        }
+        getDevicesAsync()
+    },[caretOpen])
+
+    const changeVideoDevice = ()=>{
+        
+    }
 
     const startStopVideo = ()=>{
         // console.log("Sanity Check")
@@ -46,14 +75,15 @@ const VideoButton = ({smallFeedEl})=>{
             startLocalVideoStream(streams, dispatch);
         }
     },[pendingUpdate,callStatus.haveMedia])
- 
+
     return(
         <div className="button-wrapper video-button d-inline-block">
-            <i className="fa fa-caret-up choose-video"></i>
+            <i className="fa fa-caret-up choose-video" onClick={()=>setCaretOpen(!caretOpen)}></i>
             <div className="button camera" onClick={startStopVideo}>
                 <i className="fa fa-video"></i>
                 <div className="btn-text">{callStatus.video === "enabled" ? "Stop" : "Start"} Video</div>
             </div>
+            {caretOpen ? <DropDown /> : <></>}
         </div>
     )
 }
