@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import startLocalVideoStream from "./startLocalVideoStream";
 import updateCallStatus from "../../redux-elements/actions/updateCallStatus";
 import getDevices from "./getDevices";
+import addStream from "../../redux-elements/actions/addStream";
 
 const VideoButton = ({smallFeedEl})=>{
 
@@ -35,8 +36,24 @@ const VideoButton = ({smallFeedEl})=>{
         getDevicesAsync()
     },[caretOpen])
 
-    const changeVideoDevice = ()=>{
-        
+    const changeVideoDevice = async(e)=>{
+        //the user changed the desired video device 
+        //1. we need to get that deviceId
+        const deviceId = e.target.value; 
+        // console.log(deviceId)
+        //2. we need to getUserMedia (permission)
+        const newConstraints = {
+            audio: callStatus.audioDevice === "default" ? true : {deviceId: {exact: callStatus.audioDevice}},
+            video: {deviceId: {exact: deviceId}}
+        }
+        const stream = await navigator.mediaDevices.getUserMedia(newConstraints)
+        //3. update Redux with that videoDevice
+        dispatch(updateCallStatus('videoDevice',deviceId));
+        //4. update the smallFeedEl
+        smallFeedEl.current.srcObject = stream;
+        //5. we need to update the localStream in streams
+        dispatch(addStream('localStream',stream))
+        //6. add tracks
     }
 
     const startStopVideo = ()=>{
