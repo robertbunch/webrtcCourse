@@ -4,6 +4,7 @@ import startLocalVideoStream from "./startLocalVideoStream";
 import updateCallStatus from "../../redux-elements/actions/updateCallStatus";
 import getDevices from "./getDevices";
 import addStream from "../../redux-elements/actions/addStream";
+import ActionButtonCaretDropDown from "../ActionButtonCaretDropDown";
 
 const VideoButton = ({smallFeedEl})=>{
 
@@ -15,13 +16,7 @@ const VideoButton = ({smallFeedEl})=>{
     const [ videoDeviceList, setVideoDeviceList ] = useState([])
 
     const DropDown = ()=>{
-        return(
-            <div className="caret-dropdown" style={{top:"-25px"}}>
-                <select defaultValue={callStatus.videoDevice} onChange={changeVideoDevice}>
-                    {videoDeviceList.map(vd=><option key={vd.deviceId} value={vd.deviceId}>{vd.label}</option>)}
-                </select>
-            </div>
-        )
+
     }
 
     useEffect(()=>{
@@ -105,7 +100,11 @@ const VideoButton = ({smallFeedEl})=>{
                 <i className="fa fa-video"></i>
                 <div className="btn-text">{callStatus.video === "enabled" ? "Stop" : "Start"} Video</div>
             </div>
-            {caretOpen ? <DropDown /> : <></>}
+            {caretOpen ? <ActionButtonCaretDropDown 
+                            defaultValue={callStatus.videoDevice} 
+                            changeHandler={changeVideoDevice}
+                            deviceList={videoDeviceList}
+                        /> : <></>}
         </div>
     )
 }
