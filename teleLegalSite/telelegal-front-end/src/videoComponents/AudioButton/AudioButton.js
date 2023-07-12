@@ -3,7 +3,7 @@ import { useSelector } from "react-redux"
 import ActionButtonCaretDropDown from "../ActionButtonCaretDropDown";
 import getDevices from "../VideoButton/getDevices";
 
-const AudioButton = ()=>{
+const AudioButton = ({smallFeedEl})=>{
 
     const callStatus = useSelector(state=>state.callStatus);
     const [ caretOpen, setCaretOpen ] = useState(false);
@@ -30,8 +30,32 @@ const AudioButton = ()=>{
         getDevicesAsync()
     },[caretOpen])
 
-    const changeAudioDevice = ()=>{
-
+    const changeAudioDevice = async(e)=>{
+        //the user changed the desired ouput audio device OR input audio device
+        //1. we need to get that deviceId AND the type
+        const deviceId = e.target.value.slice(5);
+        const audioType = e.target.value.slice(0,5);
+        
+        if(audioType === "output"){
+            //4 (sort of out of order). update the smallFeedEl
+            //we are now DONE! We dont care about the output for any other reason
+            smallFeedEl.current.setSinkId(deviceId);
+        }else if(audioType === "input"){
+            //2. we need to getUserMedia (permission) 
+            const newConstraints = {
+                audio: {deviceId: {exact: deviceId}},
+                video: callStatus.videoDevice === "default" ? true : {deviceId: {exact: callStatus.videoDevice}},
+            }
+            const stream = await navigator.mediaDevices.getUserMedia(newConstraints)
+            //3. update Redux with that videoDevice, and that video is enabled
+            dispatch(updateCallStatus('audioDevice',deviceId));
+            dispatch(updateCallStatus('audio','enabled'))
+            //5. we need to update the localStream in streams
+            dispatch(addStream('localStream',stream))
+            //6. add tracks
+            const tracks = stream.getAudioTracks();
+            //come back to this later
+        }
     }
 
     return(
