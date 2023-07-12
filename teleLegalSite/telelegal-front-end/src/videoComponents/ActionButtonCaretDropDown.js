@@ -9,9 +9,9 @@ const ActionButtonCaretDropDown = ({defaultValue,changeHandler,deviceList,type})
         const audioOutputEl = [];
         deviceList.forEach((d,i)=>{
             if(d.kind === "audioinput"){
-                audioInputEl.push(<option key={d.deviceId} value={d.deviceId}>{d.label}</option>)
+                audioInputEl.push(<option key={`input${d.deviceId}`} value={`input${d.deviceId}`}>{d.label}</option>)
             }else if(d.kind === "audiooutput"){
-                audioOutputEl.push(<option key={d.deviceId} value={d.deviceId}>{d.label}</option>)
+                audioOutputEl.push(<option key={`ouput${d.deviceId}`} value={`ouput${d.deviceId}`}>{d.label}</option>)
             }
         })
         audioInputEl.unshift(<optgroup label="Input Devices" />)
