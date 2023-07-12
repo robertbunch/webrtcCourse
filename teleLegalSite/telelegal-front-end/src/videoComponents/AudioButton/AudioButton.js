@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import ActionButtonCaretDropDown from "../ActionButtonCaretDropDown";
 import getDevices from "../VideoButton/getDevices";
+import updateCallStatus from "../../redux-elements/actions/updateCallStatus";
+import addStream from "../../redux-elements/actions/addStream";
 
 const AudioButton = ({smallFeedEl})=>{
 
+    const dispatch = useDispatch()
     const callStatus = useSelector(state=>state.callStatus);
     const [ caretOpen, setCaretOpen ] = useState(false);
     const [ audioDeviceList, setAudioDeviceList ] = useState([]);
