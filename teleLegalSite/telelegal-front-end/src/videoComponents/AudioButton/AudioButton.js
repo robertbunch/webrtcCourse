@@ -43,7 +43,7 @@ const AudioButton = ({smallFeedEl})=>{
             //set the stream to disabled
             const tracks = streams.localStream.stream.getAudioTracks();
             tracks.forEach(t=>t.enabled = false);
-        }else if(callStatus.video === "disabled"){
+        }else if(callStatus.audio === "disabled"){
         //second, check if the audio is disabled, if so enable
             //update redux callStatus
             dispatch(updateCallStatus('audio',"enabled"));
