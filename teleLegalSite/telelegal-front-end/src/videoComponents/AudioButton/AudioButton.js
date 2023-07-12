@@ -4,18 +4,20 @@ import ActionButtonCaretDropDown from "../ActionButtonCaretDropDown";
 import getDevices from "../VideoButton/getDevices";
 import updateCallStatus from "../../redux-elements/actions/updateCallStatus";
 import addStream from "../../redux-elements/actions/addStream";
+import startAudioStream from "./startAudioStream";
 
 const AudioButton = ({smallFeedEl})=>{
 
     const dispatch = useDispatch()
     const callStatus = useSelector(state=>state.callStatus);
+    const streams = useSelector(state=>state.streams);
     const [ caretOpen, setCaretOpen ] = useState(false);
     const [ audioDeviceList, setAudioDeviceList ] = useState([]);
 
     let micText;
-    if(callStatus.current === "idle"){
+    if(callStatus.audio === "off"){
         micText = "Join Audio"
-    }else if(callStatus.audio){
+    }else if(callStatus.audio === "enabled"){
         micText = "Mute"
     }else{
         micText = "Unmute"
@@ -33,11 +35,34 @@ const AudioButton = ({smallFeedEl})=>{
         getDevicesAsync()
     },[caretOpen])
 
+    const startStopAudio = ()=>{
+        //first, check if the audio is enabled, if so disabled
+        if(callStatus.audio === "enabled"){
+            //update redux callStatus
+            dispatch(updateCallStatus('audio',"disabled"));
+            //set the stream to disabled
+            const tracks = streams.localStream.stream.getAudioTracks();
+            tracks.forEach(t=>t.enabled = false);
+        }else if(callStatus.video === "disabled"){
+        //second, check if the audio is disabled, if so enable
+            //update redux callStatus
+            dispatch(updateCallStatus('audio',"enabled"));
+            const tracks = streams.localStream.stream.getAudioTracks();
+            tracks.forEach(t=>t.enabled = true);
+        }else{
+            //audio is "off" What do we do?
+            changeAudioDevice({target:{value:"inputdefault"}})
+            //add the tracks 
+            startAudioStream(streams);
+        }
+    }
+
     const changeAudioDevice = async(e)=>{
         //the user changed the desired ouput audio device OR input audio device
         //1. we need to get that deviceId AND the type
         const deviceId = e.target.value.slice(5);
         const audioType = e.target.value.slice(0,5);
+        console.log(e.target.value)
         
         if(audioType === "output"){
             //4 (sort of out of order). update the smallFeedEl
@@ -55,7 +80,7 @@ const AudioButton = ({smallFeedEl})=>{
             dispatch(updateCallStatus('audio','enabled'))
             //5. we need to update the localStream in streams
             dispatch(addStream('localStream',stream))
-            //6. add tracks
+            //6. add tracks - actually replaceTracks
             const tracks = stream.getAudioTracks();
             //come back to this later
         }
@@ -64,7 +89,7 @@ const AudioButton = ({smallFeedEl})=>{
     return(
         <div className="button-wrapper d-inline-block">
             <i className="fa fa-caret-up choose-audio" onClick={()=>setCaretOpen(!caretOpen)}></i>
-            <div className="button mic">
+            <div className="button mic" onClick={startStopAudio}>
                 <i className="fa fa-microphone"></i>
                 <div className="btn-text">{micText}</div>
             </div>

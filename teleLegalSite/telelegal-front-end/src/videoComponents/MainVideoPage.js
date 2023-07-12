@@ -25,7 +25,7 @@ const MainVideoPage = ()=>{
         const fetchMedia = async()=>{
             const constraints = {
                 video: true, //must have one constraint, just dont show it yet
-                audio: false,
+                audio: true, //if you make an app that has no audio, write the logic out yourself
             }
             try{
                 const stream = await navigator.mediaDevices.getUserMedia(constraints);
