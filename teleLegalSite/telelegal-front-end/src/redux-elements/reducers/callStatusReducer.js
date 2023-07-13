@@ -6,6 +6,7 @@ const initState = {
     videoDevice: 'default',
     shareScreen: false, 
     haveMedia: false, //is there a localStream, has getUserMedia been run
+    haveCreatedOffer: false,
 }
 
 export default (state = initState, action)=>{
