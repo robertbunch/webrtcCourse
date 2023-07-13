@@ -2,6 +2,7 @@
 const io = require('./server').io;
 const app = require('./server').app;
 const linkSecret = "ijr2iq34rfeiadsfkjq3ew";
+const jwt = require('jsonwebtoken');
 
 // const professionalAppointments = app.get('professionalAppointments')
 
@@ -23,22 +24,16 @@ io.on('connection',socket=>{
 
     //to fill in later
     const jwt = socket.handshake.auth.jwt;
-    let decodedData;
-    try{
-        decodedData = jwt.verify(jwt,linkSecret);
-    }catch(err){
-        //these aren't the droids we're looking for, goodbye.
-        socket.disconnect(true);
-        return;
-    }
-
+    let decodedData = jwt.verify(jwt,linkSecret);
     const { fullName, proId } = decodedData;
 
     connectedProfessionals.push({
         socketId: socket.id,
-        fullName: fullName,
-        proId,
+        fullName,
+        proId
     })
+
+    console.log(connectedProfessionals)
 
     socket.on('newOffer',({offer, apptInfo})=>{
         //offer = sdp/type, apptInfo has the uuid that we can add to allKnownOffers
