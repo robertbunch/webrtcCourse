@@ -1,7 +1,26 @@
+import { useEffect, useState } from 'react';
 import './ProDashboard.css'
+import { useSearchParams } from 'react-router-dom';
+import axios from 'axios';
+import socket from '../webRTCutilities/socketConnection';
 
 const ProDashboard = ()=>{
-    console.log("Test")
+
+    const [ searchParams, setSearchParams ] = useSearchParams();
+    const [ apptInfo, setApptInfo ] = useState([]);
+
+    useEffect(()=>{
+        //grab the token var out of the query string
+        const token = searchParams.get('token');
+        console.log(token)
+        const fetchDecodedToken = async()=>{
+            const resp = await axios.post('https://localhost:9000/validate-link',{token});
+            console.log(resp.data);
+            setApptInfo(resp.data)
+        }
+        fetchDecodedToken();
+    },[])
+
     return(
         <div className="container">
             <div className="row">

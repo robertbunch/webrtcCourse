@@ -17,7 +17,7 @@ app.get('/user-link',(req, res)=>{
 
     //data for the end-user's appt
     const apptData = {
-        professionalsFullName: "Robert Bunch, J.D.",
+        professionalsFullName: "Peter Chan, J.D.",
         apptDate: Date.now() + 500000,
         uuid,
         clientName: "Jim Jones",
@@ -39,7 +39,13 @@ app.post('/validate-link',(req, res)=>{
     const decodedData = jwt.verify(token,linkSecret);
     //send the decoded data (our object) back to the front end
     res.json(decodedData)
+})
 
-    console.log(professionalAppointments)
-
+app.get('/pro-link',(req, res)=>{
+    const userData = {
+        fullName: "Peter Chan, J.D.",
+        proId: 1234,
+    }
+    const token = jwt.sign(userData,linkSecret);
+    res.send(`<a href="https://localhost:3000/dashboard?token=${token}" target="_blank">Link Here</a>`);
 })

@@ -1,6 +1,7 @@
 //all our socketServer stuff happens here
 const io = require('./server').io;
 const app = require('./server').app;
+const linkSecret = "ijr2iq34rfeiadsfkjq3ew";
 
 // const professionalAppointments = app.get('professionalAppointments')
 
@@ -21,11 +22,22 @@ io.on('connection',socket=>{
     console.log(socket.id,"has connected")
 
     //to fill in later
-    const fullName = socket.handshake.auth.fullName
+    const jwt = socket.handshake.auth.jwt;
+    let decodedData;
+    try{
+        decodedData = jwt.verify(jwt,linkSecret);
+    }catch(err){
+        //these aren't the droids we're looking for, goodbye.
+        socket.disconnect(true);
+        return;
+    }
+
+    const { fullName, proId } = decodedData;
 
     connectedProfessionals.push({
         socketId: socket.id,
         fullName: fullName,
+        proId,
     })
 
     socket.on('newOffer',({offer, apptInfo})=>{
