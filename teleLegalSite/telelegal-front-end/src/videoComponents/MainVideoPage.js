@@ -8,7 +8,7 @@ import ActionButtons from "./ActionButtons";
 import addStream from '../redux-elements/actions/addStream';
 import { useDispatch, useSelector } from "react-redux";
 import createPeerConnection from "../webRTCutilities/createPeerConnection";
-import socket from '../webRTCutilities/socketConnection';
+import socketConnection from '../webRTCutilities/socketConnection';
 import updateCallStatus from "../redux-elements/actions/updateCallStatus";
 
 const MainVideoPage = ()=>{
@@ -57,6 +57,10 @@ const MainVideoPage = ()=>{
                     try{
                         const pc = streams[s].peerConnection;
                         const offer = await pc.createOffer()
+                        //get the token from the url for the socket connection
+                        const token = searchParams.get('token');
+                        //get the socket from socketConnection
+                        const socket = socketConnection(token)
                         socket.emit('newOffer',{offer,apptInfo})
                     }catch(err){
                         console.log(err);

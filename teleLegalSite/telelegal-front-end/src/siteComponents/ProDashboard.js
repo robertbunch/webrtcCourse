@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import './ProDashboard.css'
 import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
-import socket from '../webRTCutilities/socketConnection';
+import socketConnection from '../webRTCutilities/socketConnection';
 
 const ProDashboard = ()=>{
 
@@ -12,6 +12,7 @@ const ProDashboard = ()=>{
     useEffect(()=>{
         //grab the token var out of the query string
         const token = searchParams.get('token');
+        socketConnection(token);
         console.log(token)
         const fetchDecodedToken = async()=>{
             const resp = await axios.post('https://localhost:9000/validate-link',{token});

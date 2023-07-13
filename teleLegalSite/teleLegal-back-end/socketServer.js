@@ -22,16 +22,39 @@ const allKnownOffers = {
 io.on('connection',socket=>{
     console.log(socket.id,"has connected")
 
-    //to fill in later
-    const jwt = socket.handshake.auth.jwt;
-    let decodedData = jwt.verify(jwt,linkSecret);
+    const handshakeData = socket.handshake.auth.jwt;
+    let decodedData
+    try{
+        decodedData = jwt.verify(handshakeData,linkSecret);
+    }catch(err){
+        console.log(err);
+        //these arent the droids were looking for. Star wars...
+        // goodbye.
+        socket.disconnect()
+        return
+    }
+    
     const { fullName, proId } = decodedData;
 
-    connectedProfessionals.push({
-        socketId: socket.id,
-        fullName,
-        proId
-    })
+    if(proId){
+        //this is a professional. Update/add to connectedProfessionals
+        //check to see if this user is already in connectedProfessionals
+        //this would happen because they have reconnected
+        const connectedPro = connectedProfessionals.find(cp=>cp.proId === proId)
+        if(connectedPro){
+            //if they are, then just update the new socket.id
+            connectedPro.socketId = socket.id;
+        }else{
+            //otherwise push them on
+            connectedProfessionals.push({
+                socketId: socket.id,
+                fullName,
+                proId
+            })
+        }
+    }else{
+        //this is a client
+    }
 
     console.log(connectedProfessionals)
 
