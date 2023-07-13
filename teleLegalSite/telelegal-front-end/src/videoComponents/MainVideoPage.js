@@ -63,6 +63,7 @@ const MainVideoPage = ()=>{
                     }
                 }
             }
+            dispatch(updateCallStatus('haveCreatedOffer',true));
         }
         if(callStatus.audio === "enabled" && callStatus.video === "enabled" && !callStatus.haveCreatedOffer){
             createOfferAsync()
