@@ -2,6 +2,11 @@ img{
     max-width: 100%;
 }
 
+.dash-box.redish-bg img{
+    width: 50%;
+    text-align: center;
+}
+
 li{
     list-style: none;
 }
@@ -47,9 +52,23 @@ li{
     background-color:#418F8F
 }
 
+.redish-bg{
+    background-color:#a7265a;
+}
+
 .dash-box{
     color: white;
     padding: 10px;
+}
+
+.row.num-2 .col-6 {
+    overflow: hidden;
+}
+
+.row.num-2 .dash-box {
+    padding-bottom: 999px;
+    margin-bottom: -999px;
+    height: auto;
 }
 
 .pointer{
