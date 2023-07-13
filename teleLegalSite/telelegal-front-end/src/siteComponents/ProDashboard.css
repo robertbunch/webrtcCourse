@@ -1,0 +1,126 @@
+img{
+    max-width: 100%;
+}
+
+.dash-box.redish-bg img{
+    width: 50%;
+    text-align: center;
+}
+
+li{
+    list-style: none;
+}
+
+.main-border{
+    margin-top: 10px;
+    height: 50px;
+    border-radius: 10px 0 0;
+}
+
+.row.num-2{
+    margin-top: 15px;
+}
+
+.col-8.row .col-6{
+    padding: 15px;
+}
+
+.left-rail{
+    height: 85vh;
+
+}
+
+.clients-board{
+    border-radius: 10px;
+    height: 200px;
+    overflow: scroll;
+}
+
+.purple-bg{
+    background-color:#705CF3;
+}
+
+.blue-bg{   
+    background-color:#3B80E1;
+}
+
+.orange-bg{
+    background-color:#EA9C44;
+}
+
+.green-bg{
+    background-color:#418F8F
+}
+
+.redish-bg{
+    background-color:#a7265a;
+}
+
+.dash-box{
+    color: white;
+    padding: 10px;
+}
+
+.row.num-2 .col-6 {
+    overflow: hidden;
+}
+
+.row.num-2 .dash-box {
+    padding-bottom: 999px;
+    margin-bottom: -999px;
+    height: auto;
+}
+
+.pointer{
+    cursor: pointer;
+}
+
+.calendar{
+
+}
+
+.fa.fa-user{
+    text-align: center;
+    font-size: 60px;
+    border: 1px solid white;
+    border-radius: 50%;
+    padding: 30px;
+    color: white;
+}
+
+.menu-item{
+    padding: 20px 0px;
+    margin: 0px -10px;
+}
+
+.menu-item.active, .menu-item:hover{
+    background: #4a3cff
+}
+
+.left-rail li{
+    text-align: left;
+    width: 60%;
+    margin: auto;
+    font-size: 24px;
+    color: white;
+}
+
+.left-rail li i{
+    margin-right: 10px;
+}
+
+.waiting-text{
+    animation: blinker 1s linear infinite;
+    font-size: 24px;
+    color: red;
+}
+
+.join-btn{
+    margin-left: 10px;
+}
+
+@keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+  }
