@@ -9,7 +9,8 @@ const professionalAppointments = [{
     uuid:2,// uuid:uuidv4(),
     clientName: "Akash Patel",
 },{
-    professionalsFullName:  "Peter Chan, J.D.",
+    professionalsFullName: "Peter Chan, J.D.",
     apptDate: Date.now() + 10000000,
     uuid:3,//uuid:uuidv4(),
-    clientName:
+    clientName: "Mike Williams",
+}];
