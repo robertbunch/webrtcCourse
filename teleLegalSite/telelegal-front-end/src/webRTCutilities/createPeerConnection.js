@@ -13,7 +13,7 @@ const createPeerConnection = ()=>{
             console.log("Signaling State Change")
             console.log(e)
         })
-        peerConnection.addEventListener('icecandidates',e=>{
+        peerConnection.addEventListener('icecandidate',e=>{
             console.log("Found ice candidate...")
             if(e.candidate){
                 //emit to socket server

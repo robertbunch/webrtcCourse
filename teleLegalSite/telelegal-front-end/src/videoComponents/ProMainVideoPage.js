@@ -49,6 +49,44 @@ const ProMainVideoPage = ()=>{
         fetchMedia()
     },[])
 
+    useEffect(()=>{
+        const setAsyncOffer = async()=>{
+            for(const s in streams){
+                if(s !== "localStream"){
+                    const pc = streams[s].peerConnection;
+                    await pc.setRemoteDescription(callStatus.offer)
+                    console.log(pc.signalingstate); //should be have remote offer
+                }
+            }
+        }
+        if(callStatus.offer && streams.remote1 && streams.remote1.peerConnection){
+            setAsyncOffer()
+        }
+    },[callStatus.offer,streams.remote1])
+
+    useEffect(()=>{
+        const createAnswerAsync = async()=>{
+            //we have audio and video, we can make an answer and setLocalDescription
+            for(const s in streams){
+                if(s !== "localStream"){
+                    const pc = streams[s].peerConnection;
+                    const answer = await pc.createAnswer();
+                    await pc.setLocalDescription(answer);
+                    console.log(pc.signalingState);//have local answer
+
+                    
+                    //emit the answer to the server
+                }
+
+            }
+        }
+        //we only create an answer if audio and video are enabled AND haveCreatedAnswer is false
+        //this may run many times, but these 3 events will only happen one
+        if(callStatus.audio === "enabled" && callStatus.video === "enabled" && !callStatus.haveCreatedAnswer){
+            createAnswerAsync()
+        }
+    },[callStatus.audio, callStatus.video, callStatus.haveCreatedAnswer])
+
 
     useEffect(()=>{
         //grab the token var out of the query string
