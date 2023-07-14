@@ -4,7 +4,23 @@ const jwt = require('jsonwebtoken');
 const linkSecret = "ijr2iq34rfeiadsfkjq3ew";
 const { v4: uuidv4 } = require('uuid');
 
-const professionalAppointments = [];
+//normally this would be persistent data... db, api, file, etc.
+const professionalAppointments = [{
+    professionalsFullName: "Peter Chan, J.D.",
+    apptDate: Date.now() + 500000,
+    uuid:1,
+    clientName: "Jim Jones",
+},{
+    professionalsFullName: "Peter Chan, J.D.",
+    apptDate: Date.now() - 2000000,
+    uuid:2,// uuid:uuidv4(),
+    clientName: "Akash Patel",
+},{
+    professionalsFullName: "Peter Chan, J.D.",
+    apptDate: Date.now() + 10000000,
+    uuid:3,//uuid:uuidv4(),
+    clientName: "Mike Williams",
+}];
 
 app.set('professionalAppointments',professionalAppointments)
 
@@ -13,15 +29,7 @@ app.set('professionalAppointments',professionalAppointments)
 //us on our React site with the right info for CLIENT1 to make an offer
 app.get('/user-link',(req, res)=>{
 
-    const uuid = uuidv4(); //this is standing in as what would be a unique id/primary key in the db
-
-    //data for the end-user's appt
-    const apptData = {
-        professionalsFullName: "Peter Chan, J.D.",
-        apptDate: Date.now() + 500000,
-        uuid,
-        clientName: "Jim Jones",
-    }
+    const apptData = professionalAppointments[0];
 
     professionalAppointments.push(apptData);
 
