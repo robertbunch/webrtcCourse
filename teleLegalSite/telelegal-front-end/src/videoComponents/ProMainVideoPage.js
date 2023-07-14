@@ -11,7 +11,7 @@ import createPeerConnection from "../webRTCutilities/createPeerConnection";
 import socketConnection from '../webRTCutilities/socketConnection';
 import updateCallStatus from "../redux-elements/actions/updateCallStatus";
 
-const MainVideoPage = ()=>{
+const ProMainVideoPage = ()=>{
 
     const dispatch = useDispatch();
     const callStatus = useSelector(state=>state.callStatus)
@@ -49,30 +49,6 @@ const MainVideoPage = ()=>{
         fetchMedia()
     },[])
 
-    useEffect(()=>{
-        const createOfferAsync = async()=>{
-            //we have audio and video and we need an offer. Let's make it!
-            for(const s in streams){
-                if(s !== "localStream"){
-                    try{
-                        const pc = streams[s].peerConnection;
-                        const offer = await pc.createOffer()
-                        //get the token from the url for the socket connection
-                        const token = searchParams.get('token');
-                        //get the socket from socketConnection
-                        const socket = socketConnection(token)
-                        socket.emit('newOffer',{offer,apptInfo})
-                    }catch(err){
-                        console.log(err);
-                    }
-                }
-            }
-            dispatch(updateCallStatus('haveCreatedOffer',true));
-        }
-        if(callStatus.audio === "enabled" && callStatus.video === "enabled" && !callStatus.haveCreatedOffer){
-            createOfferAsync()
-        }
-    },[callStatus.audio, callStatus.video, callStatus.haveCreatedOffer])
 
     useEffect(()=>{
         //grab the token var out of the query string
@@ -92,7 +68,14 @@ const MainVideoPage = ()=>{
                 {/* Div to hold our remote video, our local video, and our chat window*/}
                 <video id="large-feed" ref={largeFeedEl} autoPlay controls playsInline></video>
                 <video id="own-feed" ref={smallFeedEl} autoPlay controls playsInline></video>
-                {apptInfo.professionalsFullName ? <CallInfo apptInfo={apptInfo} /> : <></>}
+                {callStatus.audio === "off" || callStatus.video === "off" ?
+                    <div className="call-info">
+                        <h1>
+                            {searchParams.get('client')} is in the waiting room.<br />
+                            Call will start when video and audio are enabled
+                        </h1>
+                    </div> : <></>
+                }
                 <ChatWindow />
             </div>
             <ActionButtons smallFeedEl={smallFeedEl} />
@@ -100,4 +83,4 @@ const MainVideoPage = ()=>{
     )
 }
 
-export default MainVideoPage
+export default ProMainVideoPage
