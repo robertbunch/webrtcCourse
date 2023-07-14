@@ -56,6 +56,14 @@ io.on('connection',socket=>{
         const professionalAppointments = app.get('professionalAppointments');
         socket.emit('apptData',professionalAppointments.filter(pa=>pa.professionalsFullName === fullName))
         
+        //loop through all known offers and send out to the professional that just joined, 
+        //the ones that belong to him/her
+        for(const key in allKnownOffers){
+            if(allKnownOffers[key].professionalsFullName === fullName){
+                //this offer is for this pro
+                io.to(socket.id).emit('newOfferWaiting',allKnownOffers[key])
+            }
+        }
     }else{
         //this is a client
     }
@@ -74,11 +82,24 @@ io.on('connection',socket=>{
         }
         //we dont emit this to everyone like we did our chat server
         //we only want this to go to our professional.
+
+        //we got professionalAppointments from express (thats where its made)
+        const professionalAppointments = app.get('professionalAppointments');
+        //find this particular appt so we can update that the user is waiting (has sent us an offer)
+        const pa = professionalAppointments.find(pa=>pa.uuid === apptInfo.uuid);
+        if(pa){
+            pa.waiting = true;
+        }
+
+        //find this particular professional so we can emit
         const p = connectedProfessionals.find(cp=>cp.fullName === apptInfo.professionalsFullName)
         if(p){
             //only emit if the professional is connected
             const socketId = p.socketId;
+            //send the new offer over
             socket.to(socketId).emit('newOfferWaiting',allKnownOffers[apptInfo.uuid])
+            //send the updated appt info with the new waiting
+            socket.to(socketId).emit('apptData',professionalAppointments.filter(pa=>pa.professionalsFullName === apptInfo.professionalsFullName))
         }
     })
 })
