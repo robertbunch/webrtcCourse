@@ -3,6 +3,8 @@ import './ProDashboard.css'
 import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import socketConnection from '../webRTCutilities/socketConnection';
+import proSocketListeners from '../webRTCutilities/proSocketListeners';
+import moment from 'moment';
 
 const ProDashboard = ()=>{
 
@@ -12,14 +14,8 @@ const ProDashboard = ()=>{
     useEffect(()=>{
         //grab the token var out of the query string
         const token = searchParams.get('token');
-        socketConnection(token);
-        console.log(token)
-        const fetchDecodedToken = async()=>{
-            const resp = await axios.post('https://localhost:9000/validate-link',{token});
-            console.log(resp.data);
-            setApptInfo(resp.data)
-        }
-        fetchDecodedToken();
+        const socket = socketConnection(token);
+        proSocketListeners(socket,setApptInfo);
     },[])
 
     return(
@@ -59,9 +55,16 @@ const ProDashboard = ()=>{
                             <div className="col-6">
                                 <div className="dash-box clients-board blue-bg">
                                     <h4>Coming Appointments</h4>
-                                    <li className="client">Akash Patel - 8-10-23 11am <div className="waiting-text d-inline-block">Waiting</div><button className="btn btn-danger join-btn">Join</button></li>
-                                    <li className="client">Jim Jones - 8-10-23, 2pm</li>
-                                    <li className="client">Mike Williams - 8-10-23 3pm</li>
+                                    {apptInfo.map(a=><div key={a.uuid}>
+                                            <li className="client">{a.clientName} - {moment(a.apptDate).calendar()} 
+                                            {a.waiting ? <>
+                                                    <div className="waiting-text d-inline-block">Waiting</div>
+                                                    <button className="btn btn-danger join-btn">Join</button>
+                                                </> : <></>}
+                                            </li>
+                                        </div>
+                                    )}
+                                    
                                 </div>
                                 
                             </div>
