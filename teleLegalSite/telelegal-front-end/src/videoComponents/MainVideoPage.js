@@ -22,6 +22,7 @@ const MainVideoPage = ()=>{
     const [ apptInfo, setApptInfo ] = useState({})
     const smallFeedEl = useRef(null); //this is a React ref to a dom element, so we can interact with it the React way
     const largeFeedEl = useRef(null);
+    const uuidRef = useRef(null);
 
     useEffect(()=>{
         //fetch the user media
@@ -36,7 +37,7 @@ const MainVideoPage = ()=>{
                 //dispatch will send this function to the redux dispatcher so all reducers are notified
                 //we send 2 args, the who, and the stream
                 dispatch(addStream('localStream',stream));
-                const { peerConnection, remoteStream } = await createPeerConnection();
+                const { peerConnection, remoteStream } = await createPeerConnection(addIce);
                 //we don't know "who" we are talking to... yet.
                 dispatch(addStream('remote1',remoteStream, peerConnection));
                 //we have a peerconnection... let's make an offer!
@@ -106,9 +107,21 @@ const MainVideoPage = ()=>{
             const resp = await axios.post('https://localhost:9000/validate-link',{token});
             console.log(resp.data);
             setApptInfo(resp.data)
+            uuidRef.current = resp.data.uuid;
         }
         fetchDecodedToken();
     },[])
+
+    const addIce = (iceC)=>{
+        //emit a new icecandidate to the signalaing server
+        const socket = socketConnection(searchParams.get('token'));
+        socket.emit('iceToServer',{
+            iceC,
+            who: 'client',
+            uuid: uuidRef.current, //we used a useRef to keep the value fresh
+        })
+
+    }
 
     return(
         <div className="main-video-page">

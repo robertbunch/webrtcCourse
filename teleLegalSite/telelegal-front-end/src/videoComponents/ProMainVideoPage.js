@@ -35,7 +35,7 @@ const ProMainVideoPage = ()=>{
                 //dispatch will send this function to the redux dispatcher so all reducers are notified
                 //we send 2 args, the who, and the stream
                 dispatch(addStream('localStream',stream));
-                const { peerConnection, remoteStream } = await createPeerConnection();
+                const { peerConnection, remoteStream } = await createPeerConnection(addIce);
                 //we don't know "who" we are talking to... yet.
                 dispatch(addStream('remote1',remoteStream, peerConnection));
                 //we have a peerconnection... let's make an offer!
@@ -105,6 +105,16 @@ const ProMainVideoPage = ()=>{
         }
         fetchDecodedToken();
     },[])
+
+    const addIce = (iceC)=>{
+        //emit ice candidate to the server
+        const socket = socketConnection(searchParams.get('token'))
+        socket.emit('iceToServer',{
+            iceC,
+            who: 'professional',
+            uuid: searchParams.get('uuid')
+        })        
+    }
 
     return(
         <div className="main-video-page">
