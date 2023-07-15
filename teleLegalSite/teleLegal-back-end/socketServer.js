@@ -68,24 +68,39 @@ io.on('connection',socket=>{
     }else{
         //this is a client
         const { professionalsFullName, uuid, clientName } = decodedData;
-        connectedClients.push({
-            clientName,
-            uuid,
-            professionalMeetingWith: professionalsFullName,
-            socketId: socket.id,
-        })
+        //check to see if the client is already in the array
+        //why? could have reconnected
+        const clientExist = connectedClients.find(c=>c.uuid == uuid)
+        if(clientExist){
+            //already connected. just update the id
+            clientExist.socketId = socket.id
+        }else{
+            //add them
+            connectedClients.push({
+                clientName,
+                uuid,
+                professionalMeetingWith: professionalsFullName,
+                socketId: socket.id,
+            })    
+        }
+
+        const offerForThisClient = allKnownOffers[uuid];
+        if(offerForThisClient){
+            io.to(socket.id).emit('answerToClient',offerForThisClient.answer);
+        }
+
     }
 
     console.log(connectedProfessionals)
 
     socket.on('newAnswer',({answer,uuid})=>{
         //emit this to the client
-        const socketToSendTo = connectedClients.find(c=>c.uuid === uuid);
+        const socketToSendTo = connectedClients.find(c=>c.uuid == uuid);
         if(socketToSendTo){
             socket.to(socketToSendTo.socketId).emit('answerToClient',answer);
         }
         //update the offer
-        const knownOffer = allKnownOffers.find(o=>o.uuid === uuid);
+        const knownOffer = allKnownOffers[uuid];
         if(knownOffer){
             knownOffer.answer = answer;
         }
