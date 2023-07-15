@@ -70,14 +70,20 @@ const ProMainVideoPage = ()=>{
             for(const s in streams){
                 if(s !== "localStream"){
                     const pc = streams[s].peerConnection;
+                    //make an answer
                     const answer = await pc.createAnswer();
+                    //because this is the answering client, the answer is the localDesc
                     await pc.setLocalDescription(answer);
                     console.log(pc.signalingState);//have local answer
-
-                    
+                    dispatch(updateCallStatus('haveCreatedAnswer',true))
+                    dispatch(updateCallStatus('answer',answer))   
                     //emit the answer to the server
+                    const token = searchParams.get('token');
+                    const socket = socketConnection(token);
+                    const uuid = searchParams.get('uuid');
+                    console.log("emitting",answer,uuid)
+                    socket.emit('newAnswer',{answer,uuid})
                 }
-
             }
         }
         //we only create an answer if audio and video are enabled AND haveCreatedAnswer is false

@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 // const professionalAppointments = app.get('professionalAppointments')
 
 const connectedProfessionals = [];
+const connectedClients = [];
 
 const allKnownOffers = {
     // uniqueId - key
@@ -33,7 +34,7 @@ io.on('connection',socket=>{
         socket.disconnect()
         return
     }
-    
+
     const { fullName, proId } = decodedData;
 
     if(proId){
@@ -66,9 +67,30 @@ io.on('connection',socket=>{
         }
     }else{
         //this is a client
+        const { professionalsFullName, uuid, clientName } = decodedData;
+        connectedClients.push({
+            clientName,
+            uuid,
+            professionalMeetingWith: professionalsFullName,
+            socketId: socket.id,
+        })
     }
 
     console.log(connectedProfessionals)
+
+    socket.on('newAnswer',({answer,uuid})=>{
+        //emit this to the client
+        const socketToSendTo = connectedClients.find(c=>c.uuid === uuid);
+        if(socketToSendTo){
+            socket.to(socketToSendTo.socketId).emit('answerToClient',answer);
+        }
+        //update the offer
+        const knownOffer = allKnownOffers.find(o=>o.uuid === uuid);
+        if(knownOffer){
+            knownOffer.answer = answer;
+        }
+
+    })
 
     socket.on('newOffer',({offer, apptInfo})=>{
         //offer = sdp/type, apptInfo has the uuid that we can add to allKnownOffers
