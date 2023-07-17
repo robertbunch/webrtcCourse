@@ -45,6 +45,7 @@ const ProMainVideoPage = ()=>{
                 //EXCEPT, it's not time yet. 
                     //SDP = information about the feed, and we have NO tracks
                 //socket.emit...
+                largeFeedEl.current.srcObject = remoteStream
             }catch(err){
                 console.log(err);
             }

@@ -24,6 +24,7 @@ const MainVideoPage = ()=>{
     const largeFeedEl = useRef(null);
     const uuidRef = useRef(null);
     const streamsRef = useRef(null);
+    const [ showCallInfo, setShowCallInfo] = useState(true)
 
     useEffect(()=>{
         //fetch the user media
@@ -45,6 +46,7 @@ const MainVideoPage = ()=>{
                 //EXCEPT, it's not time yet. 
                     //SDP = information about the feed, and we have NO tracks
                 //socket.emit...
+                largeFeedEl.current.srcObject = remoteStream //we have the remoteStream from our peerConnection. Set the video feed to be the remoteStream jsut created
             }catch(err){
                 console.log(err);
             }
@@ -134,6 +136,7 @@ const MainVideoPage = ()=>{
                 const pc = streamsRef.current[s].peerConnection;
                 pc.addIceCandidate(iceC);
                 console.log("Added an iceCandidate to existing page presence")
+                setShowCallInfo(false);
             }
         }
     }
@@ -155,7 +158,7 @@ const MainVideoPage = ()=>{
                 {/* Div to hold our remote video, our local video, and our chat window*/}
                 <video id="large-feed" ref={largeFeedEl} autoPlay controls playsInline></video>
                 <video id="own-feed" ref={smallFeedEl} autoPlay controls playsInline></video>
-                {apptInfo.professionalsFullName ? <CallInfo apptInfo={apptInfo} /> : <></>}
+                {showCallInfo ? <CallInfo apptInfo={apptInfo} /> : <></>}
                 <ChatWindow />
             </div>
             <ActionButtons smallFeedEl={smallFeedEl} />
