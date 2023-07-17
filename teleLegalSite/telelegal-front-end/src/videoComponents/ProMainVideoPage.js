@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import createPeerConnection from "../webRTCutilities/createPeerConnection";
 import socketConnection from '../webRTCutilities/socketConnection';
 import updateCallStatus from "../redux-elements/actions/updateCallStatus";
+import proSocketListeners from "../webRTCutilities/proSocketListeners";
 
 const ProMainVideoPage = ()=>{
 
@@ -22,6 +23,7 @@ const ProMainVideoPage = ()=>{
     const smallFeedEl = useRef(null); //this is a React ref to a dom element, so we can interact with it the React way
     const largeFeedEl = useRef(null);
     const [ haveGottenIce, setHaveGottenIce ] = useState(false)
+    const streamsRef = useRef(null);
 
     useEffect(()=>{
         //fetch the user media
@@ -70,6 +72,7 @@ const ProMainVideoPage = ()=>{
         if(streams.remote1 && !haveGottenIce){
             setHaveGottenIce(true);
             getIceAsync()
+            streamsRef.current = streams; //update streamsRef once we know streams exists
         }
         
     },[streams,haveGottenIce])
@@ -130,6 +133,24 @@ const ProMainVideoPage = ()=>{
         }
         fetchDecodedToken();
     },[])
+
+    useEffect(()=>{
+        //grab the token var out of the query string
+        const token = searchParams.get('token');
+        const socket = socketConnection(token);
+        proSocketListeners.proVideoSocketListeners(socket,addIceCandidateToPc);
+    },[])
+
+    const addIceCandidateToPc = (iceC)=>{
+        //add an ice candidate form the remote, to the pc
+        for (const s in streamsRef.current){
+            if(s !== 'localStream'){
+                const pc = streamsRef.current[s].peerConnection;
+                pc.addIceCandidate(iceC);
+                console.log("Added an iceCandidate to existing page presence")
+            }
+        }
+    }
 
     const addIce = (iceC)=>{
         //emit ice candidate to the server

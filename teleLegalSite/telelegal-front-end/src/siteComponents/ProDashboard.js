@@ -18,7 +18,7 @@ const ProDashboard = ()=>{
         //grab the token var out of the query string
         const token = searchParams.get('token');
         const socket = socketConnection(token);
-        proSocketListeners(socket,setApptInfo,dispatch);
+        proSocketListeners.proDashabordSocketListeners(socket,setApptInfo,dispatch);
     },[])
 
     const joinCall = (appt)=>{

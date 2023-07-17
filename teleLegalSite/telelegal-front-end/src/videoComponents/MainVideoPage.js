@@ -23,6 +23,7 @@ const MainVideoPage = ()=>{
     const smallFeedEl = useRef(null); //this is a React ref to a dom element, so we can interact with it the React way
     const largeFeedEl = useRef(null);
     const uuidRef = useRef(null);
+    const streamsRef = useRef(null);
 
     useEffect(()=>{
         //fetch the user media
@@ -51,6 +52,13 @@ const MainVideoPage = ()=>{
         fetchMedia()
     },[])
 
+    useEffect(()=>{
+        //we cannot update streamsRef until we know redux is finished
+        if(streams.remote1){
+            streamsRef.current = streams;
+        }
+    },[streams])
+    
     useEffect(()=>{
         const createOfferAsync = async()=>{
             //we have audio and video and we need an offer. Let's make it!
@@ -111,6 +119,24 @@ const MainVideoPage = ()=>{
         }
         fetchDecodedToken();
     },[])
+
+    useEffect(()=>{
+        //grab the token var out of the query string
+        const token = searchParams.get('token');
+        const socket = socketConnection(token);
+        clientSocketListeners(socket,addIceCandidateToPc);
+    },[])
+
+    const addIceCandidateToPc = (iceC)=>{
+        //add an ice candidate form the remote, to the pc
+        for (const s in streamsRef.current){
+            if(s !== 'localStream'){
+                const pc = streamsRef.current[s].peerConnection;
+                pc.addIceCandidate(iceC);
+                console.log("Added an iceCandidate to existing page presence")
+            }
+        }
+    }
 
     const addIce = (iceC)=>{
         //emit a new icecandidate to the signalaing server
