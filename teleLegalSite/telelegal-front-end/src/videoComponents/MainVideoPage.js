@@ -76,7 +76,6 @@ const MainVideoPage = ()=>{
                         const socket = socketConnection(token)
                         socket.emit('newOffer',{offer,apptInfo})
                         //add our event listeners
-                        clientSocketListeners(socket,dispatch)
                     }catch(err){
                         console.log(err);
                     }
@@ -126,7 +125,7 @@ const MainVideoPage = ()=>{
         //grab the token var out of the query string
         const token = searchParams.get('token');
         const socket = socketConnection(token);
-        clientSocketListeners(socket,addIceCandidateToPc);
+        clientSocketListeners(socket,dispatch,addIceCandidateToPc);
     },[])
 
     const addIceCandidateToPc = (iceC)=>{

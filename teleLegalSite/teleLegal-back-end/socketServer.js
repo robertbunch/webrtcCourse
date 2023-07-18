@@ -168,7 +168,7 @@ io.on('connection',socket=>{
                 }
             }else if(who === "professional"){
                 offerToUpdate.answerIceCandidates.push(iceC)
-                const socketToSendTo = connectedClients.find(cp=>cp.uuid === uuid)
+                const socketToSendTo = connectedClients.find(cp=>cp.uuid == uuid)
                 if(socketToSendTo){
                     socket.to(socketToSendTo.socketId).emit('iceToClient',iceC);
                 }
