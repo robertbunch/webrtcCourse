@@ -50,10 +50,29 @@ const VideoButton = ({smallFeedEl})=>{
         //5. we need to update the localStream in streams
         dispatch(addStream('localStream',stream))
         //6. add tracks
-        const tracks = stream.getVideoTracks();
+        const [videoTrack] = stream.getVideoTracks();
         //come back to this later
         //if we stop the old tracks, and add the new tracks, that will mean
         // ... renegotiation
+        for(const s in streams){
+            if(s !== "localStream"){
+                //getSenders will grab all the RTCRtpSenders that the PC has
+                //RTCRtpSender manages how tracks are sent via the PC
+                const senders = streams[s].peerConnection.getSenders();
+                //find the sender that is in charge of the video track
+                const sender = senders.find(s=>{
+                    if(s.track){
+                        //if this track matches the videoTrack kind, return it
+                        return s.track.kind === videoTrack.kind
+                    }else{
+                        return false;
+                    }
+                })
+                //sender is RTCRtpSender, so it can replace the track
+                sender.replaceTrack(videoTrack)
+            }
+        }
+
     }
 
     const startStopVideo = ()=>{
