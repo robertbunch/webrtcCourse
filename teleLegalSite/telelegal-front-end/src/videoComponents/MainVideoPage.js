@@ -160,7 +160,10 @@ const MainVideoPage = ()=>{
                 {showCallInfo ? <CallInfo apptInfo={apptInfo} /> : <></>}
                 <ChatWindow />
             </div>
-            <ActionButtons smallFeedEl={smallFeedEl} />
+            <ActionButtons 
+                smallFeedEl={smallFeedEl} 
+                largeFeedEl={largeFeedEl}              
+            />
         </div>
     )
 }
