@@ -1,0 +1,10 @@
+<VirtualHost *:80>
+    DocumentRoot /var/www/LOCATION_OF_YOUR_APP
+    ServerName deploying-javascript.com/
+    <Directory "/var/www/LOCATION_OF_YOUR_APP">
+        allow from all
+        AllowOverride All
+        Order allow,deny
+        Options +Indexes
+    </Directory>
+</VirtualHost>
