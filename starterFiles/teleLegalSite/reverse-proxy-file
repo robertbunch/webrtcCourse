@@ -1,0 +1,14 @@
+<VirtualHost *:80>
+    ServerName api.deploying-javascript.com
+    <Location "/">
+        ProxyPreserveHost On
+        ProxyPass http://127.0.0.1:9000/
+        ProxyPassReverse http://127.0.0.1:9000/
+
+        RewriteEngine on
+        RewriteCond ${HTTP:Upgrade} websocket [NC]
+        RewriteCond ${HTTP:Connection} upgrade [NC]
+        RewriteRule .* "wss:/localhost:3000/$1" [P,L]
+
+    </Location>
+</VirtualHost>
