@@ -1,5 +1,5 @@
 # webrtcCourse
-This is the codebase for [Part1](https://www.udemy.com/course/mastering-webrtc-part-1-real-time-video-peer-to-peer/?referralCode=1B361AAA2D18AC2FE8CD) & [Part2](https://www.udemy.com/course/mastering-webrtc-part-2-real-time-video-and-screen-share/?couponCode=394B837619709511BAE1) of my Udemy webRTC course. Part 1 is **free**, Part 2 is paid.
+This is the codebase for [my Udemy webRTC course](https://www.udemy.com/course/mastering-webrtc-part-2-real-time-video-and-screen-share/?couponCode=C8CE681D6BEF9443510E). If the coupon doesn't work, you can message me on Udemy and I'll send you one.
 
 The tags below coorespond to the git tag for the beginning of the given lecture. For instance, if you are about to start lecture 21 and you need to reset or compare your code to mine, you do:
     $ git checkout Add-Ice
